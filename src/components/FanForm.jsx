@@ -1,61 +1,60 @@
-import { useState } from "react";
-import { InputText } from "primereact/inputtext";
-import { Dropdown } from "primereact/dropdown";
-import { Button } from "primereact/button";
+import { useState } from 'react';
+import { InputText } from 'primereact/inputtext';
+import { Button } from 'primereact/button';
+import { Card } from 'primereact/card';
+import { Dropdown } from 'primereact/dropdown';
 
-export default function FanForm({ onSubmit }) {
-  const [formData, setFormData] = useState({
-    name: "",
-    cpf: "",
-    address: "",
-    favoriteGame: "",
-    interests: [],
-  });
-
-  const games = [
-    { label: "CS2", value: "cs2" },
-    { label: "Valorant", value: "valorant" },
-    { label: "League of Legends", value: "lol" },
+const FanForm = ({ onSubmit }) => {
+  const [name, setName] = useState('');
+  const [cpf, setCpf] = useState('');
+  const [address, setAddress] = useState('');
+  const [favoriteGame, setFavoriteGame] = useState('');
+  
+  // Opções de jogos
+  const gameOptions = [
+    { label: 'League of Legends', value: 'lol' },
+    { label: 'Counter-Strike: Global Offensive', value: 'csgo' },
+    { label: 'Valorant', value: 'valorant' },
+    { label: 'Dota 2', value: 'dota2' },
+    { label: 'Fortnite', value: 'fortnite' },
   ];
 
-  const handleChange = (key, value) => {
-    setFormData((prev) => ({ ...prev, [key]: value }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit(formData);
+  const handleSubmit = () => {
+    const data = { name, cpf, address, favoriteGame };
+    onSubmit(data);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-fluid p-4">
-      <div className="field">
+    <Card title="Informações Pessoais" className="p-shadow-4">
+      <div className="p-field">
         <label htmlFor="name">Nome</label>
-        <InputText id="name" value={formData.name} onChange={(e) => handleChange("name", e.target.value)} />
+        <InputText id="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Seu nome" />
       </div>
 
-      <div className="field">
+      <div className="p-field">
         <label htmlFor="cpf">CPF</label>
-        <InputText id="cpf" value={formData.cpf} onChange={(e) => handleChange("cpf", e.target.value)} />
+        <InputText id="cpf" value={cpf} onChange={(e) => setCpf(e.target.value)} placeholder="Seu CPF" />
       </div>
 
-      <div className="field">
+      <div className="p-field">
         <label htmlFor="address">Endereço</label>
-        <InputText id="address" value={formData.address} onChange={(e) => handleChange("address", e.target.value)} />
+        <InputText id="address" value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Seu endereço" />
       </div>
 
-      <div className="field">
+      <div className="p-field">
         <label htmlFor="favoriteGame">Jogo Favorito</label>
-        <Dropdown
-          id="favoriteGame"
-          options={games}
-          value={formData.favoriteGame}
-          onChange={(e) => handleChange("favoriteGame", e.value)}
-          placeholder="Selecione um jogo"
+        <Dropdown 
+          id="favoriteGame" 
+          value={favoriteGame} 
+          options={gameOptions} 
+          onChange={(e) => setFavoriteGame(e.value)} 
+          placeholder="Selecione seu jogo favorito"
         />
       </div>
 
-      <Button label="Avançar" type="submit" className="mt-3" />
-    </form>
+      <Button label="Enviar" icon="pi pi-check" onClick={handleSubmit} />
+    </Card>
   );
-}
+};
+
+export default FanForm;
