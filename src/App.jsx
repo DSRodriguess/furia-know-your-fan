@@ -1,35 +1,53 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import FanForm from './components/FanForm';
+import DocumentUpload from './components/DocumentUpload';
+import SocialLinks from './components/SocialLinks';
+import ProfileSummary from './components/ProfileSummary';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [fanData, setFanData] = useState(null);
+  const [documentValidated, setDocumentValidated] = useState(false);
+  const [socialData, setSocialData] = useState(null);
+  const [reset, setReset] = useState(false);
+
+  const handleFanDataSubmit = (data) => {
+    setFanData(data);
+    setReset(false); // Reseta para não mostrar o resumo antes de coletar tudo
+  };
+
+  const handleDocumentValidation = (file) => {
+    setDocumentValidated(true);
+  };
+
+  const handleSocialDataFetch = (data) => {
+    setSocialData(data);
+  };
+
+  const handleReset = () => {
+    setFanData(null);
+    setDocumentValidated(false);
+    setSocialData(null);
+    setReset(true); // Reinicia a aplicação
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="p-4">
+      <h2>Know Your Fan – FURIA</h2>
+
+      {!fanData && !reset && <FanForm onSubmit={handleFanDataSubmit} />}
+      {fanData && !documentValidated && <DocumentUpload onValidate={handleDocumentValidation} />}
+      {documentValidated && !socialData && <SocialLinks onFetchData={handleSocialDataFetch} />}
+      
+      {socialData && fanData && (
+        <ProfileSummary
+          fanData={fanData}
+          socialData={socialData}
+          documentValidated={documentValidated}
+          onReset={handleReset}
+        />
+      )}
+    </div>
+  );
 }
 
-export default App
+export default App;
