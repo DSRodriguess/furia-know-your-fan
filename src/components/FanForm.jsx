@@ -3,46 +3,16 @@ import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
 import { Dropdown } from 'primereact/dropdown';
+import { Message } from 'primereact/message';
 import socialBg from '../assets/social-bg.jpg';
-
-// Função para validar o CPF
-const isValidCPF = (cpf) => {
-  cpf = cpf.replace(/[^\d]+/g, '');
-  if (cpf.length !== 11) return false;
-  if (/^(\d)\1+$/.test(cpf)) return false;
-  let sum = 0;
-  let rest;
-
-  for (let i = 0; i < 9; i++) {
-    sum += parseInt(cpf.charAt(i)) * (10 - i);
-  }
-
-  rest = (sum * 10) % 11;
-  if (rest === 10 || rest === 11) rest = 0;
-  if (rest !== parseInt(cpf.charAt(9))) return false;
-
-  sum = 0;
-
-
-  for (let i = 0; i < 10; i++) {
-    sum += parseInt(cpf.charAt(i)) * (11 - i);
-  }
-
-  rest = (sum * 10) % 11;
-  if (rest === 10 || rest === 11) rest = 0;
-  if (rest !== parseInt(cpf.charAt(10))) return false;
-
-  return true;
-};
 
 const FanForm = ({ onSubmit }) => {
   const [name, setName] = useState('');
   const [cpf, setCpf] = useState('');
   const [address, setAddress] = useState('');
   const [favoriteGame, setFavoriteGame] = useState('');
-  const [cpfError, setCpfError] = useState(false);
+  const [cpfValid, setCpfValid] = useState(true);
 
-  // Opções de jogos
   const gameOptions = [
     { label: 'League of Legends', value: 'lol' },
     { label: 'Counter-Strike: Global Offensive', value: 'csgo' },
@@ -51,14 +21,51 @@ const FanForm = ({ onSubmit }) => {
     { label: 'Fortnite', value: 'fortnite' },
   ];
 
+  const formatCpf = (value) => {
+    const digits = value.replace(/\D/g, '').slice(0, 11);
+    return digits
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+  };
+
+  const unmaskCpf = (value) => value.replace(/\D/g, '');
+
+  const validateCPF = (cpf) => {
+    cpf = unmaskCpf(cpf);
+    if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
+
+    let sum = 0;
+    for (let i = 0; i < 9; i++) sum += parseInt(cpf[i]) * (10 - i);
+    let d1 = (sum * 10) % 11;
+    if (d1 === 10 || d1 === 11) d1 = 0;
+    if (d1 !== parseInt(cpf[9])) return false;
+
+    sum = 0;
+    for (let i = 0; i < 10; i++) sum += parseInt(cpf[i]) * (11 - i);
+    let d2 = (sum * 10) % 11;
+    if (d2 === 10 || d2 === 11) d2 = 0;
+    return d2 === parseInt(cpf[10]);
+  };
+
+  const handleCpfChange = (e) => {
+    const value = e.target.value;
+    setCpf(formatCpf(value));
+    setCpfValid(validateCPF(value));
+  };
+
   const handleSubmit = () => {
-    if (!isValidCPF(cpf)) {
-      setCpfError(true);
+    if (!validateCPF(cpf)) {
+      setCpfValid(false);
       return;
     }
 
-    setCpfError(false);
-    const data = { name, cpf, address, favoriteGame };
+    const data = {
+      name,
+      cpf: unmaskCpf(cpf),
+      address,
+      favoriteGame,
+    };
     onSubmit(data);
   };
 
@@ -66,9 +73,7 @@ const FanForm = ({ onSubmit }) => {
     <Card
       title="Informações Pessoais"
       className="p-shadow-4 social-card"
-      style={{
-        backgroundImage: `url(${socialBg})`,
-      }}
+      style={{ backgroundImage: `url(${socialBg})` }}
     >
       <div className="p-field p-d-flex p-jc-between p-ai-center">
         <label htmlFor="name" className="p-mr-2">Nome</label>
@@ -81,18 +86,17 @@ const FanForm = ({ onSubmit }) => {
         />
       </div>
 
-      <div className="p-field p-d-flex p-jc-between p-ai-center">
-        <label htmlFor="cpf" className="p-mr-2">CPF</label>
+      <div className="p-field p-d-flex p-flex-column">
+        <label htmlFor="cpf" className="p-mb-1">CPF</label>
         <InputText
           id="cpf"
           value={cpf}
-          onChange={(e) => setCpf(e.target.value)}
-          placeholder="Seu CPF"
-          className="p-fluid"
+          onChange={handleCpfChange}
+          placeholder="000.000.000-00"
+          maxLength={14}
+          className={`p-inputtext ${!cpfValid ? 'p-invalid' : ''}`}
         />
-        {cpf && cpfError && (
-          <span className="p-error">CPF inválido!</span>
-        )}
+        {!cpfValid && <Message severity="error" text="CPF inválido" className="p-mt-1" />}
       </div>
 
       <div className="p-field p-d-flex p-jc-between p-ai-center">
@@ -118,7 +122,12 @@ const FanForm = ({ onSubmit }) => {
         />
       </div>
 
-      <Button label="Enviar" icon="pi pi-check" onClick={handleSubmit} />
+      <Button
+        label="Enviar"
+        icon="pi pi-check"
+        onClick={handleSubmit}
+        disabled={!cpfValid}
+      />
     </Card>
   );
 };
