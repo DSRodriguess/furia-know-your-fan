@@ -13,7 +13,7 @@ O **furia-know-your-fan** é uma aplicação interativa criada para os fãs do t
 
 ## 🧪 Demonstração
 
-[🎥 Assistir à demonstração (opcional)](https://link-do-video-ou-deploy.com)
+[🎥 Assistir à demonstração (opcional)](https://youtu.be/uUbiOiWJbs4)
 
 ## 🚀 Como executar o projeto
 
