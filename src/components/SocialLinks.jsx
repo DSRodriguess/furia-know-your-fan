@@ -27,19 +27,12 @@ const SocialLinks = ({ onFetchData }) => {
   };
 
   return (
-    <Card title="Redes Sociais" 
-    className="p-shadow-4" 
-    style={{ 
-        backgroundImage: 'url(${socialBg})',
-        backgroundSize: 'cover' ,
-        backgroundPosition: 'center',
-        color: 'white',
-        border: '2px solid #6610f2',
-        borderRadius: '1rem',
-        padding: '2rem',
-        backdropFilter: 'blur(5px)',
-        boxShadow: '0 0 10px #00ffff',
-        }}
+    <Card
+      title="Redes Sociais"
+      className="p-shadow-4 social-card"
+      style={{
+        backgroundImage: `url(${socialBg})`
+      }}
     >
       <InputText id="twitter" value={links.twitter} onChange={(e) => handleChange('twitter', e.target.value)} placeholder="Twitter" />
       <InputText id="instagram" value={links.instagram} onChange={(e) => handleChange('instagram', e.target.value)} placeholder="Instagram" />

@@ -1,50 +1,116 @@
 :root {
-    --primary-color: #6610f2;
-    --accent-color: #00ffff; // ciano neon
-    --background-color: #0f0f0f;
-    --card-bg: rgba(24, 24, 24, 0.9);
-    --text-color: #ffffff;
-    --border-radius: 1rem;
-  }
-  
-  body {
-    font-family: 'Orbitron', sans-serif;
-    background-color: var(--background-color);
-    color: var(--text-color);
-    margin: 0;
-    padding: 0;
-  }
-  
-  h2 {
-    color: var(--primary-color);
-    text-align: center;
-  }
-  
-  .p-card {
-    background: var(--card-bg);
-    border-radius: var(--border-radius);
-    border: 1px solid var(--primary-color);
-    box-shadow: 0 0 10px var(--accent-color);
-  }
-  
-  .p-button {
-    background-color: var(--primary-color);
-    border: none;
-    border-radius: 30px;
-    color: white;
-    font-weight: bold;
-  }
-  
-  .p-button:hover {
-    background-color: var(--accent-color);
-    color: black;
-    transition: 0.3s;
-  }
-  
-  footer {
-    background-color: #111;
-    color: var(--text-color);
-    text-align: center;
-    padding: 1rem;
-  }
-  
+  --primary-color: #ffffff;
+  --secondary-color: #aaaaaa;
+  --accent-color: #0f0f0f;
+  --card-background: #1a1a1a;
+  --highlight-color: #ffffff;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--accent-color);
+  color: var(--primary-color);
+  margin: 0;
+  padding: 0;
+}
+
+h2, h3, label {
+  color: var(--primary-color);
+  font-family: 'Anton', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.p-card {
+  background-color: var(--card-background);
+  border: 1px solid #333;
+  border-radius: 12px;
+  padding: 1rem;
+  margin: 1rem;
+  color: var(--primary-color);
+}
+
+.p-button {
+  background-color: var(--primary-color);
+  color: var(--accent-color);
+  border: none;
+  border-radius: 999px;
+  font-weight: bold;
+  transition: 0.3s ease;
+}
+
+.p-button:hover {
+  background-color: #cccccc;
+  color: var(--accent-color);
+}
+
+.p-message {
+  color: white;
+}
+
+footer {
+  background-color: #000;
+  color: var(--primary-color);
+  padding: 1rem;
+  text-align: center;
+}
+
+.social-card {
+  background-size: cover;
+  background-position: center;
+  color: white; 
+  border: 2px solid #fff;
+  border-radius: 1rem;
+  padding: 2rem;
+  backdrop-filter: blur(5px);
+  box-shadow: 0 0 10px #fff;
+}
+
+
+.social-card p,
+.social-card strong,
+.social-card ul,
+.social-card li,
+.social-card label {
+  color: white !important;
+}
+
+.p-field {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.p-field label {
+  flex-basis: 25%; 
+}
+
+.p-field .p-inputtext,
+.p-field .p-dropdown {
+  flex-grow: 1; 
+}
+
+.p-button {
+  margin-top: 1rem; 
+}
+
+.profile-field {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.profile-field label {
+  flex-basis: 25%; 
+}
+
+.profile-field .p-inputtext,
+.profile-field .p-dropdown {
+  flex-grow: 1; 
+}
+
+.p-button {
+  margin-top: 1rem; 
+}
