@@ -5,11 +5,42 @@ import { Card } from 'primereact/card';
 import { Dropdown } from 'primereact/dropdown';
 import socialBg from '../assets/social-bg.jpg';
 
+// Função para validar o CPF
+const isValidCPF = (cpf) => {
+  cpf = cpf.replace(/[^\d]+/g, '');
+  if (cpf.length !== 11) return false;
+  if (/^(\d)\1+$/.test(cpf)) return false;
+  let sum = 0;
+  let rest;
+
+  for (let i = 0; i < 9; i++) {
+    sum += parseInt(cpf.charAt(i)) * (10 - i);
+  }
+
+  rest = (sum * 10) % 11;
+  if (rest === 10 || rest === 11) rest = 0;
+  if (rest !== parseInt(cpf.charAt(9))) return false;
+
+  sum = 0;
+
+
+  for (let i = 0; i < 10; i++) {
+    sum += parseInt(cpf.charAt(i)) * (11 - i);
+  }
+
+  rest = (sum * 10) % 11;
+  if (rest === 10 || rest === 11) rest = 0;
+  if (rest !== parseInt(cpf.charAt(10))) return false;
+
+  return true;
+};
+
 const FanForm = ({ onSubmit }) => {
   const [name, setName] = useState('');
   const [cpf, setCpf] = useState('');
   const [address, setAddress] = useState('');
   const [favoriteGame, setFavoriteGame] = useState('');
+  const [cpfError, setCpfError] = useState(false);
 
   // Opções de jogos
   const gameOptions = [
@@ -21,6 +52,12 @@ const FanForm = ({ onSubmit }) => {
   ];
 
   const handleSubmit = () => {
+    if (!isValidCPF(cpf)) {
+      setCpfError(true);
+      return;
+    }
+
+    setCpfError(false);
     const data = { name, cpf, address, favoriteGame };
     onSubmit(data);
   };
@@ -53,6 +90,9 @@ const FanForm = ({ onSubmit }) => {
           placeholder="Seu CPF"
           className="p-fluid"
         />
+        {cpf && cpfError && (
+          <span className="p-error">CPF inválido!</span>
+        )}
       </div>
 
       <div className="p-field p-d-flex p-jc-between p-ai-center">
